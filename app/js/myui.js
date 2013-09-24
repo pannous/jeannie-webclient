@@ -8,7 +8,8 @@ var popupWindow;
 var maxGeoWait = 100;
 var apiLogin="chrome-demo";
 var apiKey="";
-var apiDebug=false;
+var apiDebug = false;
+var apiURL = "https://ask.pannous.com/api";
 
 $(document).ready(function(e) {
     $('#myinput').focus();
@@ -155,16 +156,9 @@ function doRequest(input, locale, latLon) {
         return;
     }
 
-    //var clientTime = getIsoTime(new Date());
     clientTime = getTimeZone(lastTimeZone);
 
-    var service = window.location.pathname;
-    if(service.lastIndexOf('/') != service.length - 1)
-        service += "/";
-    service += "api";
-
-    var webjeanniePath = service
-    + "?input=" + encodeURIComponent(input)
+    var webjeannieParams = "?input=" + encodeURIComponent(input)
     + "&debug=" + apiDebug    
     + "&login=" + apiLogin
     + "&key=" + apiKey
@@ -173,8 +167,21 @@ function doRequest(input, locale, latLon) {
     + "&location=" + lastLocation
     + "&clientFeatures=say,show-images,open-url,show-urls,selector,show-emails,reminder,google-login";
 
-    webjeanniePath += googvars.getURLParams();
-    var url = location.protocol + "//" + location.host + webjeanniePath;
+    webjeannieParams += googvars.getURLParams();
+    
+    var url;
+    if(window.location.hostname == "localhost") {
+        // localhost:port/path/api
+        var tmpPath = window.location.pathname;
+        if(tmpPath.lastIndexOf('/') != tmpPath.length - 1)
+            tmpPath += "/";
+        tmpPath += "api";
+        url = location.protocol + "//" + location.host + tmpPath + webjeannieParams;
+    } else {            
+        // for file://path and production
+        url = apiURL + webjeannieParams;
+    }
+    
     console.log(url);
 
     var mainOutput = $("#mainOutput");

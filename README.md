@@ -14,8 +14,15 @@ If you are not sure what to ask Jeannie, then click on the Examples-Tab and clic
 
 This project stands under the Apache License 2.0. Of course our logos and images are excluded. We are using for some images [this nice](http://www.famfamfam.com) collection!
 
-# Setup Jeannie for Chrome
+# Setup
 
  * cd app
  * change URL
  * open app/index.html in a browser
+
+# Browser Access
+
+ * Allow location access to make Jeannie smarter guessing your location. Read [on mozilla docs](https://www.mozilla.org/firefox/geolocation/) more about it. E.g. this will allow to answer general questions like "Whats the weather?" or location specific ones like "Where am I?".
+ * Allow speech recognition in Chrome to make Jeannie listening to your voice. Attention: you'll need to setup this app into an HTTPS environment in order to avoid that such a browser-request is done everytime it losts the audio-stream.
+ * Allow popups to view intermediate results like youtube or google search. 
+
