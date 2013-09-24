@@ -1,6 +1,6 @@
 # Jeannie for Chrome
 
-Jeannie is a siri like virtual assistant with over 3 million in the past years!
+Jeannie is a siri like virtual assistant with over 3 million users in the past years!
 Now you can fully extend the functionality of your bot.
 This project is the source code to the web client.
 Try [our demo](https://ask.pannous.com) in the browser now!
@@ -8,8 +8,7 @@ For other clients and look [here](http://jeannie-assistant.com/).
 
 # What can I ask?
 
-If you are not sure what to ask Jeannie, then click on the Examples-Tab and click some of the examples!
-More examples are given in the API documentation below.
+Jeannie performs all the standard tasks required by modern assistants, and much more:
 
  * Who is Obama?
  * Whats the weather?
@@ -24,6 +23,8 @@ More examples are given in the API documentation below.
  * "Is there a traffic jam in Berlin?" And then: "What is the weather there?"
  * ... and much more! 
 
+If you are not sure what to ask Jeannie, then click on the Examples-Tab and click some of the examples!
+More examples are given in the API documentation below.
 
 # Local Setup
 
@@ -31,8 +32,8 @@ Just open app/index.html in a browser! Works best in [Chrome](https://google.com
 
 Optionally:
 
+ * To make calls skype is necessary (your browser has to support [skype URLs](https://support.skype.com/en/faq/FA12243/how-do-i-enable-skype-click-to-call-in-chrome)) and your contact needs to have a telephon number associated (in google contacts). Coming soon: SIP!
  * Text to speech only works on our domain. You can create your own avatar on [sitepal](http://sitepal.com/).
- * To make calls skype is necessary (your browser has to support [skype URLs](https://support.skype.com/en/faq/FA12243/how-do-i-enable-skype-click-to-call-in-chrome)) and your contact needs to have a telephon number associated (in google contacts).
  * Set your own clientId and apiKey under app/js/googlehandling.js
 
 
