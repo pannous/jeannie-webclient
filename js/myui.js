@@ -155,9 +155,6 @@ function doRequest(input, locale, latLon) {
         return;
     }
 
-    var index = location.pathname.lastIndexOf("/webeannie");
-    if(index < 0)
-        index = 0;
     //var clientTime = getIsoTime(new Date());
     clientTime = getTimeZone(lastTimeZone);
 
@@ -166,7 +163,7 @@ function doRequest(input, locale, latLon) {
         service += "/";
     service += "api";
 
-    var webjeanniePath = location.pathname.substring(0, index)+ service
+    var webjeanniePath = service
     + "?input=" + encodeURIComponent(input)
     + "&debug=" + apiDebug    
     + "&login=" + apiLogin

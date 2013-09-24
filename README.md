@@ -8,5 +8,7 @@ This project stands under the Apache License 2.0. Of course our logos and images
 
 # Setup Jeannie for Chrome
 
+change
+open index.html in the browser and try!
 TODO describe how to setup this client on localhost
 TODO allow cross origin requests
