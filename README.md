@@ -3,9 +3,21 @@
 Try [our demo](https://ask.pannous.com) now! [Chrome](https://google.com//chrome/) or [Chromium](https://download-chromium.appspot.com/) work best.
 If you are not sure what to ask Jeannie, then click on the Examples-Tab and click some of the examples!
 
+
+# Setup
+
+ * open app/index.html in a browser
+
+
 # API Documentation
 
 The documentation for our Jeannie API is [here](https://docs.google.com/document/d/1dVG_B5Sc2x-fi1pN6iJJjfF1bJY6KEFzUqjOb8NsntI/edit?pli=1).
+
+
+# License
+
+This JavaScript project stands under the Apache License 2.0. Of course our logos and images are excluded. We are using for some images [this nice](http://www.famfamfam.com) collection!
+
 
 # Limitations
 
@@ -14,13 +26,6 @@ The documentation for our Jeannie API is [here](https://docs.google.com/document
  * The Google login is currently [not working](https://github.com/pannous/jeannie-webclient/issues/1) for Safari - we'd like your pull request!
  * To make calls skype is necessary (your browser has to support [skype URLs](https://support.skype.com/en/faq/FA12243/how-do-i-enable-skype-click-to-call-in-chrome)) and your contact needs to have a telephon number associated (in google contacts).
 
-# License
-
-This project stands under the Apache License 2.0. Of course our logos and images are excluded. We are using for some images [this nice](http://www.famfamfam.com) collection!
-
-# Setup
-
- * open app/index.html in a browser
 
 # Browser Access
 
