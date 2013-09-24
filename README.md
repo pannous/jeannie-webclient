@@ -45,7 +45,7 @@ This JavaScript project stands under the Apache License 2.0. Of course our logos
 Additionally we are using several projects with a different license
 
  * [JQuery](http://jquery.com/), MIT license
- * [jquery.dd.js](https://github.com/HenrikJoreteg/jquery.dd)
+ * [jquery.dd.js](https://github.com/HenrikJoreteg/jquery.dd), MIT license
  * [history.js](https://github.com/browserstate/history.js/), BSD compliant
  * [moment.js](http://momentjs.com/), MIT license
  * [Google APIs](http://code.google.com/p/google-api-javascript-client/), Apache License 2.0
