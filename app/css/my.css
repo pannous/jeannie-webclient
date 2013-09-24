@@ -1,9 +1,9 @@
 div a, #menu li.active a {
-    color: #0066ff;    
+    color: #0088ff;    
 }
 
 div a:hover, #description div ul li:hover, #menu li a {
-    color: #0088ff;    
+    color: #63b0fd;
 }
 
 div a {

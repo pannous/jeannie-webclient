@@ -3,8 +3,8 @@
 Jeannie is a siri like virtual assistant with over 3 million in the past years!
 Now you can fully extend the functionality of your bot.
 This project is the source code to the web client.
-Try [our demo](https://ask.pannous.com) now! Works best in [Chrome](https://google.com//chrome/).
-
+Try [our demo](https://ask.pannous.com) in the browser now!
+For other clients and look [here](http://jeannie-assistant.com/).
 
 # What can I ask?
 
@@ -27,7 +27,7 @@ More examples are given in the API documentation below.
 
 # Local Setup
 
-Just open app/index.html in a browser!
+Just open app/index.html in a browser! Works best in [Chrome](https://google.com/chrome/).
 
 Optionally:
 
