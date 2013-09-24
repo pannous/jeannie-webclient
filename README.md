@@ -16,8 +16,6 @@ This project stands under the Apache License 2.0. Of course our logos and images
 
 # Setup
 
- * cd app
- * change URL
  * open app/index.html in a browser
 
 # Browser Access
