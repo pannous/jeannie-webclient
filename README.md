@@ -16,7 +16,15 @@ The documentation for our Jeannie API is [here](https://docs.google.com/document
 
 # License
 
-This JavaScript project stands under the Apache License 2.0. Of course our logos and images are excluded. We are using for some images [this nice](http://www.famfamfam.com) collection!
+This JavaScript project stands under the Apache License 2.0. Of course our logos and images are excluded and must not be used in your application.
+Additionally we are using several projects with a different license
+
+ * [JQuery](http://jquery.com/), MIT license
+ * [jquery.dd.js](https://github.com/HenrikJoreteg/jquery.dd)
+ * [history.js](https://github.com/browserstate/history.js/), BSD compliant
+ * [moment.js](http://momentjs.com/), MIT license
+ * [Google APIs](http://code.google.com/p/google-api-javascript-client/), Apache License 2.0
+ * For some images we use [this](http://www.famfamfam.com) collection
 
 
 # Limitations
