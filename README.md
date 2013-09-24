@@ -1,12 +1,36 @@
 # Jeannie for Chrome
 
 Try [our demo](https://ask.pannous.com) now! [Chrome](https://google.com//chrome/) or [Chromium](https://download-chromium.appspot.com/) work best.
+
+
+# What can I ask?
+
 If you are not sure what to ask Jeannie, then click on the Examples-Tab and click some of the examples!
+More examples are given in the API documentation below.
+
+ * Who is Obama?
+ * Whats the weather?
+ * When is the next TV show for Simpsons?
+ * Show me an elephant
+ * Route from Berlin Neukölln to paris
+ * Remind me tomorrow at 4 pm about the dentist
+ * Who are you?
+ * Find pizza
+ * What time is it?
+ * Where am I?
+ * "Is there a traffic jam in Berlin?" And then: "What is the weather there?"
+ * ... and much more! 
 
 
-# Setup
+# Local Setup
 
- * open app/index.html in a browser
+Just open app/index.html in a browser!
+
+Optionally:
+
+ * Text to speech only works on our domain. You can create your own avatar on [sitepal](http://sitepal.com/).
+ * To make calls skype is necessary (your browser has to support [skype URLs](https://support.skype.com/en/faq/FA12243/how-do-i-enable-skype-click-to-call-in-chrome)) and your contact needs to have a telephon number associated (in google contacts).
+ * Set your own clientId and apiKey under app/js/googlehandling.js
 
 
 # API Documentation
@@ -30,9 +54,7 @@ Additionally we are using several projects with a different license
 # Limitations
 
  * Only Chrome supports speech recognition via Google, but other Browser will work too via keyboard.
- * Text to speech only works on our domain. You can create your own avatar on [sitepal](http://sitepal.com/).
  * The Google login is currently [not working](https://github.com/pannous/jeannie-webclient/issues/1) for Safari - we'd like your pull request!
- * To make calls skype is necessary (your browser has to support [skype URLs](https://support.skype.com/en/faq/FA12243/how-do-i-enable-skype-click-to-call-in-chrome)) and your contact needs to have a telephon number associated (in google contacts).
 
 
 # Browser Access
