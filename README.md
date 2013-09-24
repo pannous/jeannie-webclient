@@ -3,6 +3,10 @@
 Try [our demo](https://ask.pannous.com) now! [Chrome](https://google.com//chrome/) or [Chromium](https://download-chromium.appspot.com/) work best.
 If you are not sure what to ask Jeannie, then click on the Examples-Tab and click some of the examples!
 
+# API Documentation
+
+The documentation for our Jeannie API is [here](https://docs.google.com/document/d/1dVG_B5Sc2x-fi1pN6iJJjfF1bJY6KEFzUqjOb8NsntI/edit?pli=1).
+
 # Limitations
 
  * Only Chrome supports speech recognition via Google, but other Browser will work too via keyboard.
@@ -23,4 +27,4 @@ This project stands under the Apache License 2.0. Of course our logos and images
  * Allow location access to make Jeannie smarter guessing your location. Read [on mozilla docs](https://www.mozilla.org/firefox/geolocation/) more about it. E.g. this will allow to answer general questions like "Whats the weather?" or location specific ones like "Where am I?".
  * Allow speech recognition in Chrome to make Jeannie listening to your voice. Attention: you'll need to setup this app into an HTTPS environment in order to avoid that such a browser-request is done everytime it losts the audio-stream.
  * Allow popups to view intermediate results like youtube or google search. 
-
+ * Allow Jeannie to access your Google account. This is necessary for contact, call, sms and email requests but this also ensures that the same user data is used as with our [Android Jeannie app](https://play.google.com/store/apps/details?id=com.pannous.voice.actions.free).
