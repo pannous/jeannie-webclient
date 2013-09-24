@@ -1,6 +1,6 @@
 # Jeannie for Chrome
 
-Try [our demo](https://ask.pannous.com) now! [Chrome](https://google.com//chrome/) or [Chromium](https://download-chromium.appspot.com/) work best.
+Try our [browser demo](https://ask.pannous.com). For our other clients look [here](http://jeannie-assistant.com/).
 
 
 # What can I ask?
@@ -24,7 +24,8 @@ More examples are given in the API documentation below.
 
 # Local Setup
 
-Just open app/index.html in a browser!
+Just open app/index.html in a browser! [Chrome](https://google.com//chrome/) or [Chromium](https://download-chromium.appspot.com/) work best but other
+works too. See Limitations for more information.
 
 Optionally:
 
