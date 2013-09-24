@@ -1,0 +1,261 @@
+<!--
+ Copyright 2012 Pannous GmbH
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jeannie for Chrome</title>
+        <meta name="keywords" content="Jeannie for Chrome,conversational search,siri for browser,siri in browser,siri browser,browser siri,siri for chrome,jeannie for browser,jeannie for chrome"/>
+        <meta name="viewport" content="width=360, initial-scale=0.5" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script language="JavaScript" type="text/javascript">
+            // simple redirect            
+            if("https:" != document.location.protocol && window.location.hostname != "localhost" && window.location.hostname != "")
+                window.location = "https://" + window.location.hostname + window.location.pathname + window.location.search;
+        </script>
+        <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+        <!-- handle browser URL + history -->
+        <script defer type="text/javascript" src="js/jquery.history.js"></script>
+        <!-- image drop down -->
+        <script defer type="text/javascript" src="dd/jquery.dd.js"></script>
+        <!-- for google login -->
+        <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+        <!-- for easy date parsing and formatting -->
+        <script defer type="text/javascript" src="js/moment.min.js"></script>
+        <script type="text/javascript" src="js/common.js?v=1"></script>
+        <link rel="stylesheet" type="text/css" href="dd/dd.css" />
+        <link rel="stylesheet" type="text/css" href="css/my.css?v=2" />
+        <script type="text/javascript" src="js/speech_rec.js?v=4"></script>
+        <script type="text/javascript" src="js/tts.js?v=3"></script>
+        <script type="text/javascript" src="js/localhandling.js"></script>
+        <script type="text/javascript" src="js/myui.js?v=8"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="google_div">
+                <button id="google_login">Login</button>
+            </div>
+            <div id="main">
+                <div>
+                    <a href="https://ask.pannous.com">
+                        
+                        <img id="logo" src="img/logo.png" alt="Jeannie for Chrome"/>                        
+                        
+                        <!-- TODO embedded png does not show up
+                        <img id="logo" src="img/logo.svg" alt="Jeannie for Chrome"/>
+                        -->
+                    </a>
+                </div>
+                <div id="speaker">
+                    <div id="toggleSpeach">
+                        <img id="speachimage" alt="pause" src="img/control-pause.png"/>
+                    </div>
+                    <div id="avatar">
+                        <div id="oddcastscript"></div>
+                        <script language="JavaScript" type="text/javascript"
+                        src="https://vhss.oddcast.com/vhost_embed_functions_v2.php?acc=2823212&js=1"></script>
+                        <script language="JavaScript" type="text/javascript">
+                            try {
+                                AC_VHost_Embed(2823212,220,320,'',1,1, 2242868, 0,0,0,'80e2f38283eb610420bb718bc720e98c',9);
+                            } catch(ex) {}                            
+                        </script>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div id="header">
+                    <form id="myform">
+                        <input id="myinput"
+                               class="left"
+                               type="text" name="input" value=""
+                               autocomplete="off" maxlength="200"
+                               placeholder="Enter your question or use microphone"
+                               onwebkitspeechchange="mysubmit()"
+                               x-webkit-speech="" />
+
+                        <select id="locale-menu" name="locale" onchange="changeLanguage(this.value)">
+                            <!-- http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 -->
+                            <option value="" title="img/country/.png">Guess</option>
+                            <!-- English -->
+                            <!-- uk -->
+                            <option value="en_GB" title="img/country/gb.png">  </option>
+                            <!-- canada -->
+                            <option value="en_CA" title="img/country/ca.png">  </option>
+                            <!-- australia -->
+                            <option value="en_AU" title="img/country/au.png">  </option>
+                            <!-- us -->
+                            <option value="en" title="img/country/us.png">  </option>
+                            <!-- German -->
+                            <!-- germany -->
+                            <option value="de" title="img/country/de.png">  </option>
+                            <!-- austria -->
+                            <option value="de_AT" title="img/country/at.png">  </option>
+                            <!-- French -->
+                            <option value="fr" title="img/country/fr.png">  </option>                           
+
+                            <!-- now order lexicographical -->
+                            <!-- Arabic -->
+                            <option value="ar" title="img/country/ae.png">  </option>                            
+                            <!-- Catalan 
+                            <option value="" title="img/.png">  </option>
+                            -->
+                            <!-- Chinese -->
+                            <option value="zh_CN" title="img/country/zh_CN.png">  </option>
+                            <!-- Danish -->
+                            <option value="da" title="img/country/dk.png">  </option>
+                            <!-- Dutch -->
+                            <option value="nl" title="img/country/nl.png">  </option>
+                            <!-- Finnish -->
+                            <option value="fi" title="img/country/fi.png">  </option>
+                            <!-- Galician
+                            <option value="" title="img/country_.png">  </option>
+                            -->
+                            <!-- Greek -->
+                            <option value="el" title="img/country/gr.png">  </option>
+                            <!-- Italian -->
+                            <option value="it" title="img/country/it.png">  </option>
+                            <!-- Japanese -->
+                            <option value="ja" title="img/country/ja.png">  </option>
+                            <!-- Korean -->
+                            <option value="ko" title="img/country/kr.png">  </option>
+                            <!-- Norwegian -->
+                            <option value="no" title="img/country/no.png">  </option>
+                            <!-- Portuguese -->
+                            <option value="pt" title="img/country/pt.png">  </option>
+                            <!-- brazil -->
+                            <option value="pt_BR" title="img/country/br.png">  </option>
+                            <!-- Polish -->
+                            <option value="pl" title="img/country/pl.png">  </option>
+                            <!-- Romanian 
+                            <option value="ro" title="img/country/ro.png"></option>
+                            -->
+                            <!-- Russian -->
+                            <option value="ru" title="img/country/ru.png">  </option>
+                            <!-- Spanish -->
+                            <option value="es" title="img/country/es.png">  </option>
+                            <!-- argentinia no voice
+                            <option value="es_AR" title="img/country/ar.png">  </option>
+                            -->
+                            <!-- mexico -->
+                            <option value="es_MX" title="img/country/mx.png">  </option>                            
+                            <!-- Swedish -->
+                            <option value="sv" title="img/country/se.png">  </option>
+                            <!-- Turkish -->
+                            <option value="tr" title="img/country/tr.png">  </option>
+                        </select>
+                    </form>
+                    <button id="speechrec_start" class="hidden" onclick="startButton(true)">
+                        <img id="start_img" src="img/mic.png" alt="Start">
+                    </button>                    
+                </div>
+
+                <div class="info">
+                    <p id="info_blocked" class="hidden">Not allowed to access microphone.
+                        Change your settings in chrome://settings/contentExceptions#media-stream</p>                    
+                    <p id="info_denied" class="hidden">Access denied to microphone</p>
+                    <p id="info_no_microphone" class="hidden">No microphone</p>
+                    <!-- Do we need to inform the user about it? -->
+                    <p id="info_no_speech" class="hidden">No speech</p>
+                    <p id="info_unknown" class="hidden">Unknown error. See logs</p>
+                    <p id="info_error_network" class="hidden">Network error</p>
+                    <p id="info_error_aborted" class="hidden">Aborted</p>
+                </div>
+
+                <div class="clear"></div>
+                <div id="description">
+                    <ul id="menu">
+                        <li><a href="#ex">Examples</a></li>
+                        <li><a href="#docs">Documentation</a></li>
+                    </ul>
+                    <div id="ex" class="usage-description">
+                        <ul>
+                            <li tab="ex">What is the weather like in Berlin?</li>
+                            <li tab="ex">News about Obama</li>
+                            <li tab="ex">Show me an elephant</li>
+                            <li tab="ex">Define algorithm</li>
+                            <li tab="ex">Find a pizzeria in Berlin</li>
+                            <li tab="ex">Who is president of America?</li>
+                            <li tab="ex">Navigate from Kassel to Berlin</li>
+                            <li tab="ex">What is the next train from London to Paris</li>
+                            <li tab="ex">What is the distance to the moon?</li>
+                            <li tab="ex">When is the next TV show for Simpsons?</li>
+                            <li tab="ex">When was Obama born?</li>
+                            <li tab="ex">Is there a traffic jam in Berlin?</li>
+                            <li tab="ex" timeZone="-420">Give me the bus that goes from bell street alexandria to huntington alexandria</li>
+                            <li tab="ex">Where is Bamberg?</li>
+                            <li tab="ex" locale="en">Translate *Mein Name ist Jeannie* into English</li>
+                            <li tab="ex">Where do YOU live?</li>
+                            <li tab="ex">What's the date?</li>
+                        </ul>                        
+                        <span>
+                            <b>Answers requiring Google-Login:</b>
+                        </span>
+                        <ul>
+                            <li tab="ex">Remind me tomorrow at 4 pm about the dentist</li>
+                            <li tab="ex">Set alarm in seven days and 3 hours and 20 minutes</li>
+                            <li tab="ex">Show appointments for next week</li>
+                            <li tab="ex">Call peter</li>
+                            <!-- <li tab="ex">What is the email address from peter?</li> -->
+                            <li tab="ex">Send SMS to Bob about the car</li>
+                            <li tab="ex">Send Email to Linda about my new dress</li>
+                            <li tab="ex">Show latest emails</li>                            
+                        </ul>
+                        <span>
+                            <b>Answers depending on your location:</b>
+                        </span>
+                        <ul>
+                            <li tab="ex">Where am I?</li>
+                            <li tab="ex">Navigate me to Berlin</li>
+                            <li tab="ex">Weather for tomorrow</li>
+                            <li tab="ex">Traffic information</li>
+                            <li tab="ex">Find a restaurant</li>
+                        </ul>
+                        <span>
+                            <b>German response:</b>
+                        </span>
+                        <ul>
+                            <li tab="ex" locale="de">Wann fährt ein Zug von Berlin nach Kassel?</li>
+                            <li tab="ex" locale="de">Verkehrsinformationen Berlin</li>
+                            <li tab="ex" locale="de">Wann kommen die Simpsons im Fernsehen?</li>
+                            <li tab="ex" locale="de">Was läuft gerade in zdf?</li>
+                        </ul>
+                    </div>
+                    <div id="docs" class="app-description">
+                        <p>
+                            Jeannie for Chrome is Open Source and available on
+                            <a href="https://github.com/pannous/jeannie-webclient">GitHub</a>.<br/>
+                            The documentation for the Jeannie API is available
+                            <a href="https://docs.google.com/document/d/1dVG_B5Sc2x-fi1pN6iJJjfF1bJY6KEFzUqjOb8NsntI/edit">here</a>.
+                            <a href="http://pannous.com/contact">Contact us</a> for a full license key.
+                            Jeannie for Chrome is a web version of the
+                            <a href="https://play.google.com/store/apps/details?id=com.pannous.voice.actions.free">
+                                Android</a>
+                            and <a href="https://play.google.com/store/apps/details?id=com.pannous.voice.actions.free">
+                                iOS</a> friend from <a href="http://pannous.info">Pannous GmbH</a>. It exposes
+                            <a href="https://ask.pannous.com/api?input=show+me+elephants&debug=true">our raw Jeannie API</a>
+                            and adds a bit UI to it.
+                        </p>
+
+                        <p>
+                            Jeannie for Chrome is created by <a class="pannous_img" href="http://pannous.info"><img src="img/pannous.png" alt="Pannous GmbH"></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div id="mainOutput"></div>
+            </div>
+        </div>
+        <span id="sound_dummy"/>
+    </body>
+</html>
