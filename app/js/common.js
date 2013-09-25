@@ -173,27 +173,42 @@ function openEmail(to, subject, text) {
 Composer = function() {
     this.state = 'inactive';
     this.to = '';
-    this.subject = '';
+    this.subject = '';    
     this.type = 'email';
     this.lastIndex = 0;
 }
 
+Composer.prototype.initFromObject = function(mailToData, input) {
+    if(!mailToData)
+        return false;
+        
+    this.to = mailToData.to;
+    this.subject = mailToData.subject;
+    this.setBody(mailToData.body);
+    this.compose(input);
+    return true;
+}
 
-Composer.prototype.checkCompose = function(input) {    
+Composer.prototype.compose = function(input) {
+    this.showInputArea(true);
+    this.state = 'active';
+        
+    // TODO support sms
+    //        if(isSMSType(input)) {
+    //            composeObject.type = 'sms';
+    //        } else {
+    this.type = 'email';
+//        }        
+}
+
+Composer.prototype.checkCompose = function(input) {
+    if(!input)
+        return false;
     if(this.state == 'inactive') {
         if(!this.shouldHandleCompose(input))
             return false;
         
-        this.showInputArea(true);
-        this.state = 'active';
-        
-        // TODO support sms
-        //        if(isSMSType(input)) {
-        //            composeObject.type = 'sms';
-        //        } else {
-        this.type = 'email';
-        //        }
-        
+        this.compose(input);        
         return true;
     }
     
@@ -203,40 +218,44 @@ Composer.prototype.checkCompose = function(input) {
         
         // TODO support sms
         if(this.type == 'email') {
-            openEmail(this.to, this.subject, this.getComposedText());
+            openEmail(this.to, this.subject, this.getBody());
         }
         this.showInputArea(false);
         
-        // still avoid that 'send email' will be sent to API => return true;        
+    // still avoid that 'send email' will be sent to API => return true;        
     } else if(this.shouldClear(input)) {
-        this.clearComposedText();
+        this.clearBody();
         
     } else if((tmpLen = inputStartsWith(input, ['i said', "ich sagte"])) > 0) {
-        this.replaceOldInCompose(input.substr(tmpLen));
+        this.replaceOldInBody(input.substr(tmpLen));
     } else {
-        this.addToCompose(input);        
+        this.addToBody(input);        
     }
     return true;
 }
 
-Composer.prototype.replaceOldInCompose = function(input) {
+Composer.prototype.replaceOldInBody = function(input) {
     var area = $("#inputarea");
     var old = $.trim(area.val().substr(0, this.lastIndex));
-    $("#inputarea").val($.trim(old + " " + input));
-}
-Composer.prototype.addToCompose = function(input) {
-    var area = $("#inputarea");
-    var old = area.val();
-    this.lastIndex = old.length;
-    $("#inputarea").val($.trim(old + " " + input));
+    this.setBody(old + " " + input);    
 }
 
-Composer.prototype.clearComposedText = function() {
+Composer.prototype.setBody = function(str) {
+    $("#inputarea").val($.trim(str));
+}
+    
+Composer.prototype.addToBody = function(input) {
+    var old = $("#inputarea").val();
+    this.lastIndex = old.length;
+    this.setBody(old + " " + input);
+}
+
+Composer.prototype.clearBody = function() {
     this.lastIndex = 0;
     return $("#inputarea").val('');
 }
 
-Composer.prototype.getComposedText = function() {
+Composer.prototype.getBody = function() {
     return $("#inputarea").val();
 }
 

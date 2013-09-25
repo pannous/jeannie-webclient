@@ -189,6 +189,7 @@ function doRequest(input, locale, latLon) {
         var text = "";
         var imageSrc;
         var openUrl = false;
+        var mailtoObject = false;
         var showUrl = false;
         var actions = false;
         var input = "";
@@ -222,8 +223,10 @@ function doRequest(input, locale, latLon) {
                     text = actions.say;
             }                       
             
-            if(actions.open)
+            if(actions.open) {
                 openUrl = actions.open.url;
+                mailtoObject = actions.open.mailto;
+            }
 
             if(actions.show) {
                 var emails = actions.show.emails;
@@ -304,12 +307,14 @@ function doRequest(input, locale, latLon) {
             output.append(smallDiv);
         }
 
-        mainOutput.prepend(output);
-        play(text, outLang);
-
         if(openUrl) {
-            if(openUrl.indexOf("mailto:") == 0) {
-                document.location.href = openUrl;
+            if(mailtoObject) {                
+                composeObject.initFromObject(mailtoObject, input);
+                // no append to output and no talking
+                return;
+                
+                // old behaviour:
+                // document.location.href = openUrl;
             } else {
                 // then it is hard to press Back button:
                 // location.href = openUrl;
@@ -326,6 +331,9 @@ function doRequest(input, locale, latLon) {
                 popupWindow.focus();
             }
         }
+                
+        mainOutput.prepend(output);
+        play(text, outLang);
     };
 
     $.ajax({

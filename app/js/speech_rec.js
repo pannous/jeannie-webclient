@@ -2,6 +2,7 @@ var recognizing = false;
 var startTimestamp;
 var finalTranscript = '';
 var recognitionObj;
+var startImg;
 
 // states: 'nothing', 'restart', 'stop'
 var audioState = 'nothing';
@@ -92,6 +93,7 @@ function initWebkitSpeechRecognition() {
     if (!isSpeechRecPossible())
         return false;    
 
+    startImg = $('#start_img');
     recognitionObj = new webkitSpeechRecognition();
     recognitionObj.continuous = true;
     recognitionObj.interimResults = false;
@@ -99,7 +101,7 @@ function initWebkitSpeechRecognition() {
     recognitionObj.onstart = function () {
         recognizing = true;
         showInfo('info_speak_now');
-        start_img.src = 'img/mic-animate-blue.gif';
+        startImg.attr('src', 'img/mic-animate-blue.gif');
     };
 
     recognitionObj.onaudioend = function () {
@@ -116,10 +118,10 @@ function initWebkitSpeechRecognition() {
         } else if (event.error == 'aborted') {
             showInfo('info_error_aborted');
         } else if (event.error == 'no-speech') {
-            start_img.src = 'img/mic.png';
+            startImg.attr('src', 'img/mic.png');
             showInfo('info_no_speech');
         } else if (event.error == 'audio-capture') {
-            start_img.src = 'img/mic.png';
+            startImg.attr('src', 'img/mic.png');
             showInfo('info_no_microphone');
         } else if (event.error == 'not-allowed') {
             if (event.timeStamp - startTimestamp < 100) {
@@ -139,7 +141,7 @@ function initWebkitSpeechRecognition() {
             restartSpeechRecogition(true);
 
         audioState = 'nothing';
-        start_img.src = 'img/mic.png';        
+        startImg.attr('src', 'img/mic.png');
     };
 
     recognitionObj.onresult = function (event) {
@@ -221,7 +223,7 @@ function startRecognition() {
     
     // final_span.innerHTML = '';
     // interim_span.innerHTML = '';
-    start_img.src = 'img/mic-slash.png';
+    startImg.attr('src', 'img/mic-slash.png');
     showInfo('info_allow');
 // TODO startTimestamp = event.timeStamp;
 }
