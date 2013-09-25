@@ -165,9 +165,7 @@ function initWebkitSpeechRecognition() {
             if(tryStandby(input)) {
             // standby/sleep command
             } else if(tryClose(input)) {
-            // close popup window
-            } else if(checkCompose(input)) {
-            // switch to input area
+            // close popup window            
             } else {
                 // hand over recognized text ONLY if not sleeping
                 $('#myinput').val(input);
@@ -262,110 +260,4 @@ function startButton(force) {
 
 function changeLanguage(lang) {
     restartSpeechRecogition(true);
-}
-
-// 1. enable input area => type=sms/email, (default email)
-// 2. disable send but still listen
-//    TODO automatically copy to clipboard full text?
-//    TODO detect special commands like 'new line', 'question mark', 'apostrophe', 'dot/point'
-// 3. detect 'send' and create the email/sms, and disable input area
-//    TODO it should also be possible to say 'send this to peter'
-//    TODO if not specified => ask for it!
-var composeObject = {
-    state : 'inactive',
-    to : '',
-    subject : '',
-    type : 'email'
-};
-function checkCompose(input) {    
-    if(composeObject.state == 'inactive') {
-        if(!shouldHandleCompose(input))
-            return false;
-        
-        showInputArea(true);
-        composeObject.state = 'active';
-        
-        // TODO support sms
-        //        if(isSMSType(input)) {
-        //            composeObject.type = 'sms';
-        //        } else {
-        composeObject.type = 'email';
-        //        }
-        
-        return true;
-    }
-    
-    if(isEndCompose(input)) {
-        composeObject.state = 'inactive';
-        
-        // TODO support sms
-        if(composeObject.type == 'email') {
-            openEmail(composeObject.to, composeObject.subject, getComposedText());
-        }
-        showInputArea(false);
-        
-        // still avoid that 'send email' will be sent to API => return true;        
-    } else if(shouldClear(input)) {
-        clearComposedText();
-        
-    } else {
-        addToCompose(input);        
-    }
-    return true;
-}
-
-function openEmail(to, subject, text) { 
-    subject = encodeURI(subject);
-    var body = encodeURI(text);
-    to = encodeURI(to);
-    window.location.href = 'mailto:'+to+'?subject=' + subject + '&body=' + body;
-}
-
-function addToCompose(input) {
-    var area = $("#inputarea");
-    var old = area.val();
-    $("#inputarea").val($.trim(old + " " + input));
-}
-
-function clearComposedText() {
-    return $("#inputarea").val('');
-}
-
-function getComposedText() {
-    return $("#inputarea").val();
-}
-
-function showInputArea(show) {
-    if(show) {
-        $("#myinput").hide();
-        $("#inputarea").show();
-    } else {
-        $("#myinput").show();
-        $("#inputarea").hide();
-    }
-}
-
-function shouldClear(input) {
-    input = input.toLowerCase();       
-    return exactMatches(input, ["clear", "remove all"]);
-}
-
-function isEndCompose(input) {
-    input = input.toLowerCase();       
-    return exactMatches(input, ["send email", "send mail", "send sms", "send message", "send that", "send it"])    
-    || exactMatches(input, ["finish", "stop"]);
-}
-
-function isSMSType(input) {
-    input = input.toLowerCase();    
-    return matches(input, ["sms", "text message"]);
-}
-
-function shouldHandleCompose(input) {
-    input = input.toLowerCase();
-       
-    // email
-    return exactMatches(input, ["compose email", "compose mail", "new email", "new mail", "create email", "create mail"])
-    // sms
-    || exactMatches(input, ["compose sms", "new sms", "create sms"]);
 }

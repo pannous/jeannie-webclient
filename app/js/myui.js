@@ -10,6 +10,7 @@ var apiLogin="chrome-demo";
 var apiKey="";
 var apiDebug = false;
 var apiURL = "https://ask.pannous.com/api";
+var composeObject = new Composer();
 
 $(document).ready(function(e) {
     $('#myinput').focus();
@@ -130,6 +131,9 @@ function closePopupWindow() {
 
 function doRequest(input, locale, latLon) {
     closePopupWindow();
+    if(composeObject.checkCompose(input))
+        return;
+    
     if(!latLon)
         latLon = "";
     if(input == null)

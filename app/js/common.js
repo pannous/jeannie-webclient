@@ -2,6 +2,10 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
+function startsWith(str, suffix) {
+    return str.indexOf(suffix) == 0;
+}
+
 function getLocale(l) {
     return (l == null) ? '' : l.toString();
 }
@@ -99,10 +103,28 @@ function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
-function exactMatches(input, words, and_or) {
+function inputStartsWith(input, words) {
+    input = input.toLowerCase();
     if(isArray(words)) {       
         for(var i = 0; i < words.length; i++) {
-            if(input == words[i])
+            var w = words[i].toLowerCase();
+            if(input.indexOf(w) == 0)
+                return w.length;
+        }
+        return -1;        
+    }
+        
+    if(input.indexOf(words) == 0)
+        return words.length;
+    return -1;
+}
+
+function exactMatches(input, words) {
+    input = input.toLowerCase();
+    if(isArray(words)) {       
+        for(var i = 0; i < words.length; i++) {
+            var w = words[i].toLowerCase();
+            if(input == w)
                 return true;
         }
         return false;        
@@ -112,21 +134,138 @@ function exactMatches(input, words, and_or) {
 }
 
 function matches(input, words, and_or) {
+    input = input.toLowerCase();
     if(isArray(words)) {
         if(and_or == "AND") {
             for(var i = 0; i < words.length; i++) {
-                if(input.indexOf(words[i]) < 0)
+                var w = words[i].toLowerCase();
+                if(input.indexOf(w) < 0)
                     return false;
             }
             return true;
         } 
         // default is OR
         for(var i = 0; i < words.length; i++) {
-            if(input.indexOf(words[i]) >= 0)
+            var w = words[i].toLowerCase();
+            if(input.indexOf(w) >= 0)
                 return true;
         }
         return false;        
     }
         
-    return input.indexOf(words) >= 0
+    return input.indexOf(words.toLowerCase()) >= 0
+}
+
+function openEmail(to, subject, text) { 
+    subject = encodeURI(subject);
+    var body = encodeURI(text);
+    to = encodeURI(to);
+    window.location.href = 'mailto:'+to+'?subject=' + subject + '&body=' + body;
+}
+
+// 1. enable input area => type=sms/email, (default email)
+// 2. disable send but still listen
+//    TODO automatically copy to clipboard full text?
+//    TODO detect special commands like 'new line', 'question mark', 'apostrophe', 'dot/point'
+// 3. detect 'send' and create the email/sms, and disable input area
+//    TODO it should also be possible to say 'send this to peter'
+//    TODO if not specified => ask for it!
+Composer = function() {
+    this.state = 'inactive';
+    this.to = '';
+    this.subject = '';
+    this.type = 'email';
+    this.lastIndex = 0;
+}
+
+
+Composer.prototype.checkCompose = function(input) {    
+    if(this.state == 'inactive') {
+        if(!this.shouldHandleCompose(input))
+            return false;
+        
+        this.showInputArea(true);
+        this.state = 'active';
+        
+        // TODO support sms
+        //        if(isSMSType(input)) {
+        //            composeObject.type = 'sms';
+        //        } else {
+        this.type = 'email';
+        //        }
+        
+        return true;
+    }
+    
+    var tmpLen;
+    if(this.isEndCompose(input)) {
+        this.state = 'inactive';
+        
+        // TODO support sms
+        if(this.type == 'email') {
+            openEmail(this.to, this.subject, this.getComposedText());
+        }
+        this.showInputArea(false);
+        
+        // still avoid that 'send email' will be sent to API => return true;        
+    } else if(this.shouldClear(input)) {
+        this.clearComposedText();
+        
+    } else if((tmpLen = inputStartsWith(input, ['i said', "ich sagte"])) > 0) {
+        this.replaceOldInCompose(input.substr(tmpLen));
+    } else {
+        this.addToCompose(input);        
+    }
+    return true;
+}
+
+Composer.prototype.replaceOldInCompose = function(input) {
+    var area = $("#inputarea");
+    var old = $.trim(area.val().substr(0, this.lastIndex));
+    $("#inputarea").val($.trim(old + " " + input));
+}
+Composer.prototype.addToCompose = function(input) {
+    var area = $("#inputarea");
+    var old = area.val();
+    this.lastIndex = old.length;
+    $("#inputarea").val($.trim(old + " " + input));
+}
+
+Composer.prototype.clearComposedText = function() {
+    this.lastIndex = 0;
+    return $("#inputarea").val('');
+}
+
+Composer.prototype.getComposedText = function() {
+    return $("#inputarea").val();
+}
+
+Composer.prototype.showInputArea = function(show) {
+    if(show) {
+        $("#myinput").hide();
+        $("#inputarea").show();
+    } else {
+        $("#myinput").show();
+        $("#inputarea").hide();
+    }
+}
+
+Composer.prototype.shouldClear = function(input) {          
+    return exactMatches(input, ["clear", "remove all"]);
+}
+
+Composer.prototype.isEndCompose = function(input) {
+    return exactMatches(input, ["send email", "send mail", "send sms", "send message", "send that", "send it"])    
+    || exactMatches(input, ["finish", "stop"]);
+}
+
+Composer.prototype.isSMSType = function(input) {
+    return matches(input, ["sms", "text message"]);
+}
+
+Composer.prototype.shouldHandleCompose = function(input) {
+    // email
+    return exactMatches(input, ["compose email", "compose mail", "new email", "new mail", "create email", "create mail"])
+    // sms
+    || exactMatches(input, ["compose sms", "new sms", "create sms"]);
 }
