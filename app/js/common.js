@@ -99,6 +99,18 @@ function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
+function exactMatches(input, words, and_or) {
+    if(isArray(words)) {       
+        for(var i = 0; i < words.length; i++) {
+            if(input == words[i])
+                return true;
+        }
+        return false;        
+    }
+        
+    return input.indexOf(words) >= 0
+}
+
 function matches(input, words, and_or) {
     if(isArray(words)) {
         if(and_or == "AND") {

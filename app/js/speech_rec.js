@@ -273,7 +273,8 @@ function changeLanguage(lang) {
 //    TODO if not specified => ask for it!
 var composeObject = {
     state : 'inactive',
-    to : false,
+    to : '',
+    subject : '',
     type : 'email'
 };
 function checkCompose(input) {    
@@ -283,24 +284,41 @@ function checkCompose(input) {
         
         showInputArea(true);
         composeObject.state = 'active';
-        if(isSMSType(input)) {
-            composeObject.type = 'sms';
-        } else {
-            composeObject.type = 'email';
-        }
         
-        return true;         
+        // TODO support sms
+        //        if(isSMSType(input)) {
+        //            composeObject.type = 'sms';
+        //        } else {
+        composeObject.type = 'email';
+        //        }
+        
+        return true;
     }
     
     if(isEndCompose(input)) {
-        composeObject.state = 'inactive';        
-            
+        composeObject.state = 'inactive';
+        
+        // TODO support sms
+        if(composeObject.type == 'email') {
+            openEmail(composeObject.to, composeObject.subject, getComposedText());
+        }
         showInputArea(false);
-        return false;
+        
+        // still avoid that 'send email' will be sent to API => return true;        
+    } else if(shouldClear(input)) {
+        clearComposedText();
+        
     } else {
-        addToCompose(input);
-        return true;
+        addToCompose(input);        
     }
+    return true;
+}
+
+function openEmail(to, subject, text) { 
+    subject = encodeURI(subject);
+    var body = encodeURI(text);
+    to = encodeURI(to);
+    window.location.href = 'mailto:'+to+'?subject=' + subject + '&body=' + body;
 }
 
 function addToCompose(input) {
@@ -309,11 +327,11 @@ function addToCompose(input) {
     $("#inputarea").val($.trim(old + " " + input));
 }
 
-function clearText() {
+function clearComposedText() {
     return $("#inputarea").val('');
 }
 
-function getText() {
+function getComposedText() {
     return $("#inputarea").val();
 }
 
@@ -327,10 +345,15 @@ function showInputArea(show) {
     }
 }
 
+function shouldClear(input) {
+    input = input.toLowerCase();       
+    return exactMatches(input, ["clear", "remove all"]);
+}
+
 function isEndCompose(input) {
     input = input.toLowerCase();       
-    return matches(input, ["send email", "send mail", "send sms", "send message", "send that", "send it"])    
-    || matches(input, ["finish", "stop"]);
+    return exactMatches(input, ["send email", "send mail", "send sms", "send message", "send that", "send it"])    
+    || exactMatches(input, ["finish", "stop"]);
 }
 
 function isSMSType(input) {
@@ -342,7 +365,7 @@ function shouldHandleCompose(input) {
     input = input.toLowerCase();
        
     // email
-    return matches(input, ["compose email", "compose mail", "new email", "new mail", "create email", "create mail"])
+    return exactMatches(input, ["compose email", "compose mail", "new email", "new mail", "create email", "create mail"])
     // sms
-    || matches(input, ["compose sms", "new sms", "create sms"]);
+    || exactMatches(input, ["compose sms", "new sms", "create sms"]);
 }
