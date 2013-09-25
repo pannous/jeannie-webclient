@@ -94,3 +94,27 @@ function prepareTabs(id, link) {
         return false;
     });
 }
+
+function isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}
+
+function matches(input, words, and_or) {
+    if(isArray(words)) {
+        if(and_or == "AND") {
+            for(var i = 0; i < words.length; i++) {
+                if(input.indexOf(words[i]) < 0)
+                    return false;
+            }
+            return true;
+        } 
+        // default is OR
+        for(var i = 0; i < words.length; i++) {
+            if(input.indexOf(words[i]) >= 0)
+                return true;
+        }
+        return false;        
+    }
+        
+    return input.indexOf(words) >= 0
+}

@@ -1,5 +1,5 @@
 <!--
- Copyright 2012 Pannous GmbH
+ Copyright 2013 Pannous GmbH
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@
         <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
         <!-- for easy date parsing and formatting -->
         <script defer type="text/javascript" src="js/moment.min.js"></script>
-        <script type="text/javascript" src="js/common.js?v=1"></script>
+        <script type="text/javascript" src="js/common.js?v=2"></script>
         <link rel="stylesheet" type="text/css" href="dd/dd.css" />
         <link rel="stylesheet" type="text/css" href="css/my.css?v=2" />
         <script type="text/javascript" src="js/speech_rec.js?v=4"></script>
@@ -83,7 +83,7 @@
                                placeholder="Enter your question or use microphone"
                                onwebkitspeechchange="mysubmit()"
                                x-webkit-speech="" />
-
+                        <textarea id="inputarea" cols="62" rows="8" class="hidden"></textarea>
                         <select id="locale-menu" name="locale" onchange="changeLanguage(this.value)">
                             <!-- http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 -->
                             <option value="" title="img/country/.png">Guess</option>

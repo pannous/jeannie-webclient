@@ -232,3 +232,9 @@ div a {
 .clickable {
     cursor: pointer;
 }
+
+#inputarea {
+    margin-left: -80px;
+    margin-top: 1px;
+    margin-bottom: 20px;
+}
