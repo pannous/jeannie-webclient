@@ -17,7 +17,7 @@ window.onfocus = function() {
         if(sleeping)
             sleep(false, true);
 
-        restartSpeechRecogition();
+        restartSpeechRecogition(false);
     }
 };
 
@@ -26,14 +26,15 @@ function stopSpeechRecognition() {
     recognitionObj.stop();
 }
 
-function restartSpeechRecogition() {
+function restartSpeechRecogition(force) {
     if(!isSpeechRecPossible())
         return;
     
-    console.log("restartSpeechRecogition");
-    initWebkitSpeechRecognition();
-
-    startRecognition();
+    if(force || !recognitionObj) {
+        console.log("restartSpeechRecogition");
+        initWebkitSpeechRecognition();
+        startRecognition();
+    }
 }
 var standby_phrases = ["standby", "stand by","stand-by", "go to sleep", "goto sleep",
 "go sleeping", "sleep now", "to background", "goto background", "in background",
@@ -135,7 +136,7 @@ function initWebkitSpeechRecognition() {
         console.log("onend, sleeping: " + sleeping + ", audioState:" + audioState);
         recognizing = false;
         if (audioState == "restart")
-            restartSpeechRecogition();
+            restartSpeechRecogition(true);
 
         audioState = 'nothing';
         start_img.src = 'img/mic.png';        
@@ -162,9 +163,9 @@ function initWebkitSpeechRecognition() {
         // wake up command should not result in a request
         } else {
             if(tryStandby(input)) {
-                // standby/sleep command
+            // standby/sleep command
             } else if(tryClose(input)) {
-                // close popup window
+            // close popup window
             } else {
                 // hand over recognized text ONLY if not sleeping
                 $('#myinput').val(input);
@@ -255,4 +256,8 @@ function startButton(force) {
     }
     sleep(false, false);
     startRecognition();
+}
+
+function changeLanguage(lang) {
+    restartSpeechRecogition(true);
 }

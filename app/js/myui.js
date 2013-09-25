@@ -22,8 +22,7 @@ $(document).ready(function(e) {
         $("#speechrec_start").show();
         $("#myinput").removeAttr('x-webkit-speech');
 
-        initWebkitSpeechRecognition();
-        startRecognition();
+        restartSpeechRecogition(false);        
     }
 
     // click on example
@@ -80,10 +79,6 @@ $(document).ready(function(e) {
 
 function getSelectedLocale() {
     return $("#locale-menu option:selected").val();
-}
-
-function changeLanguage(lang) {
-    restartSpeechRecogition();
 }
 
 function mysubmit() {

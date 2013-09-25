@@ -65,9 +65,9 @@ This JavaScript project stands under the Apache License 2.0. Of course our logos
  * The web client currently does not play sound actions, but this can be easily achieved with a JavaScript library.
 
 
-# Browser Access
+# Browser Permission
 
  * Allow location access to make Jeannie smarter guessing your location. Read [on mozilla docs](https://www.mozilla.org/firefox/geolocation/) more about it. E.g. this will allow to answer general questions like "Whats the weather?" or location specific ones like "Where am I?".
- * Allow speech recognition in Chrome to make Jeannie listening to your voice. Attention: you'll need to setup this app into an HTTPS environment in order to avoid that such a browser-request is done everytime it losts the audio-stream.
+ * Allow speech recognition in Chrome to make Jeannie listening to your voice. Attention: Pages hosted on HTTPS do not need to ask repeatedly for permission, whereas HTTP hosted pages do.
  * Allow popups to view intermediate results like youtube or google search. 
  * Allow Jeannie to access your Google account. This is necessary for contact, call, sms and email requests but this also ensures that the same user data is used as with our [Android Jeannie app](https://play.google.com/store/apps/details?id=com.pannous.voice.actions.free).
