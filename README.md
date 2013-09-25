@@ -7,7 +7,7 @@ This project is the source code to the web client.
 Try [our demo](https://ask.pannous.com) in the browser now!
 For other clients and look [here](http://jeannie-assistant.com/).
 
-[![Ask Jeannie](https://trello-attachments.s3.amazonaws.com/510ffeb37c6181d462007892/51dd10936a5b14a425001acb/93b705ad2d4ca35dc14721c517e9523b/webclient.png)](https://ask.pannous.com?input=hi)
+[![Ask Jeannie](https://trello-attachments.s3.amazonaws.com/510ffeb37c6181d462007892/51dd10936a5b14a425001acb/b679632825359c3c4784fcbe48b8a765/webclient.png)](https://ask.pannous.com?input=hi)
 
 # What can I ask?
 
