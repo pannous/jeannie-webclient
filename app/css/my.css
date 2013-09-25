@@ -228,3 +228,7 @@ div a {
     margin-bottom: -5px;
     width: 400px;
 }
+
+.clickable {
+    cursor: pointer;
+}

@@ -199,7 +199,13 @@ function doRequest(input, locale, latLon) {
                 lastLocale = resultJson.info.detectedLanguage;
             input = resultJson.info.input;
         }
-        output.append("<div class='inputDiv'>Q: "+input+"</div>");
+        
+        var clickableDiv = $("<div class='inputDiv'>Q: " + input + "</div>");
+        clickableDiv .click(function() {
+            doRequest(input, locale, latLon);
+        });
+        clickableDiv.addClass('clickable');
+        output.append(clickableDiv);
         var outLang = lastLocale;
         if(!resultJson.output || resultJson.output.length == 0) {
             text = "Sorry, nothing found";
