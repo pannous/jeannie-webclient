@@ -213,7 +213,7 @@ Composer.prototype.isComposeCommand = function(input) {
         return false;
     
     var tmpLen;
-    if(exactMatches(input, ["cancel email", "cancel", "discard", "discard it"])) {
+    if(exactMatches(input, ["cancel email", "cancel", "discard", "discard email", "discard it"])) {
         this.state = 'inactive';
         this.showInputArea(false);
         
