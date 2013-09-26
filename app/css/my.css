@@ -233,8 +233,12 @@ div a {
     cursor: pointer;
 }
 
-#inputarea {
+#inputarea textarea {
     margin-left: -80px;
     margin-top: 1px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+}
+
+#composer-commands {
+    font-size: 11px;
 }

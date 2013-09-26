@@ -10,9 +10,10 @@ var apiLogin="chrome-demo";
 var apiKey="";
 var apiDebug = false;
 var apiURL = "https://ask.pannous.com/api";
-var composeObject = new Composer();
+var composeObject;
 
 $(document).ready(function(e) {
+    composeObject = new Composer();
     $('#myinput').focus();
     
     $("#google_login").click(function() {
@@ -131,7 +132,7 @@ function closePopupWindow() {
 
 function doRequest(input, locale, latLon) {
     closePopupWindow();
-    if(composeObject.checkCompose(input))
+    if(composeObject.isComposeCommand(input))
         return;
     
     if(!latLon)
@@ -309,12 +310,12 @@ function doRequest(input, locale, latLon) {
 
         if(openUrl) {
             if(mailtoObject) {                
-                composeObject.initFromObject(mailtoObject, input);
+                composeObject.openComposer(mailtoObject, input);
                 // no append to output and no talking
                 return;
                 
-                // old behaviour:
-                // document.location.href = openUrl;
+            // old behaviour:
+            // document.location.href = openUrl;
             } else {
                 // then it is hard to press Back button:
                 // location.href = openUrl;

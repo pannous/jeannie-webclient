@@ -50,9 +50,9 @@
             <div id="main">
                 <div>
                     <a href="https://ask.pannous.com">
-                        
+
                         <img id="logo" src="img/logo.png" alt="Jeannie for Chrome"/>                        
-                        
+
                         <!-- TODO embedded png does not show up
                         <img id="logo" src="img/logo.svg" alt="Jeannie for Chrome"/>
                         -->
@@ -83,7 +83,18 @@
                                placeholder="Enter your question or use microphone"
                                onwebkitspeechchange="mysubmit()"
                                x-webkit-speech="" />
-                        <textarea id="inputarea" cols="62" rows="8" class="hidden"></textarea>
+                        <div id="inputarea" class="hidden">
+                            <div id="composer-names"></div>
+                            <textarea cols="62" rows="8"></textarea>
+                            <div id="composer-commands" title="Supported Commands">
+                                <pre>
+clear|remove all
+delete that|remove that
+cancel| cancel email
+I said (correction)
+                                </pre>
+                            </div>
+                        </div>
                         <select id="locale-menu" name="locale" onchange="changeLanguage(this.value)">
                             <!-- http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 -->
                             <option value="" title="img/country/.png">Guess</option>

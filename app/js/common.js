@@ -176,12 +176,19 @@ Composer = function() {
     this.subject = '';    
     this.type = 'email';
     this.lastIndex = 0;
+    this.wholeDiv = $("#inputarea");
+    this.area = $("#inputarea textarea");
 }
 
-Composer.prototype.initFromObject = function(mailToData, input) {
+Composer.prototype.openComposer = function(mailToData, input) {
     if(!mailToData)
         return false;
-        
+    
+    if(mailToData.to) {
+        var names = $("#inputarea #composer-names");
+        names.append("To: " + mailToData.names);
+    }
+    
     this.to = mailToData.to;
     this.subject = mailToData.subject;
     this.setBody(mailToData.body);
@@ -201,19 +208,16 @@ Composer.prototype.compose = function(input) {
 //        }        
 }
 
-Composer.prototype.checkCompose = function(input) {
-    if(!input)
+Composer.prototype.isComposeCommand = function(input) {
+    if(!input || this.state == 'inactive')
         return false;
-    if(this.state == 'inactive') {
-        if(!this.shouldHandleCompose(input))
-            return false;
-        
-        this.compose(input);        
-        return true;
-    }
     
     var tmpLen;
-    if(this.isEndCompose(input)) {
+    if(exactMatches(input, ["cancel email", "cancel", "discard", "discard it"])) {
+        this.state = 'inactive';
+        this.showInputArea(false);
+        
+    } else if(this.isEndCompose(input)) {
         this.state = 'inactive';
         
         // TODO support sms
@@ -222,9 +226,16 @@ Composer.prototype.checkCompose = function(input) {
         }
         this.showInputArea(false);
         
-    // still avoid that 'send email' will be sent to API => return true;        
-    } else if(this.shouldClear(input)) {
+        // still avoid that 'send email' will be sent to API => return true;        
+    } else if(exactMatches(input, ["clear", "clear all", "remove all", "delete all"])) {
         this.clearBody();
+        
+    } else if(exactMatches(input, ["full stop"])) {
+        // period, question mark, exclamation mark/point are already transformed by google speech recognition
+        this.addToBody('.');
+        
+    } else if(exactMatches(input, ["delete that", "delete it", "scratch that", "scratch it", "remove that", "remove it"])) {
+        this.replaceOldInBody('');
         
     } else if((tmpLen = inputStartsWith(input, ['i said', "ich sagte"])) > 0) {
         this.replaceOldInBody(input.substr(tmpLen));
@@ -235,42 +246,38 @@ Composer.prototype.checkCompose = function(input) {
 }
 
 Composer.prototype.replaceOldInBody = function(input) {
-    var area = $("#inputarea");
-    var old = $.trim(area.val().substr(0, this.lastIndex));
-    this.setBody(old + " " + input);    
+    var old = $.trim(this.area.val().substr(0, this.lastIndex));
+    this.setBody(old + " " + $.trim(input));
 }
 
 Composer.prototype.setBody = function(str) {
-    $("#inputarea").val($.trim(str));
+    this.area.val($.trim(str));
 }
     
 Composer.prototype.addToBody = function(input) {
-    var old = $("#inputarea").val();
+    var old = this.area.val();
     this.lastIndex = old.length;
     this.setBody(old + " " + input);
 }
 
 Composer.prototype.clearBody = function() {
     this.lastIndex = 0;
-    return $("#inputarea").val('');
+    return this.area.val('');
 }
 
 Composer.prototype.getBody = function() {
-    return $("#inputarea").val();
+    return this.area.val();
 }
 
 Composer.prototype.showInputArea = function(show) {
     if(show) {
         $("#myinput").hide();
-        $("#inputarea").show();
+        this.wholeDiv.show();
+        this.area.focus()
     } else {
         $("#myinput").show();
-        $("#inputarea").hide();
+        this.wholeDiv.hide();
     }
-}
-
-Composer.prototype.shouldClear = function(input) {          
-    return exactMatches(input, ["clear", "remove all"]);
 }
 
 Composer.prototype.isEndCompose = function(input) {
@@ -280,11 +287,4 @@ Composer.prototype.isEndCompose = function(input) {
 
 Composer.prototype.isSMSType = function(input) {
     return matches(input, ["sms", "text message"]);
-}
-
-Composer.prototype.shouldHandleCompose = function(input) {
-    // email
-    return exactMatches(input, ["compose email", "compose mail", "new email", "new mail", "create email", "create mail"])
-    // sms
-    || exactMatches(input, ["compose sms", "new sms", "create sms"]);
 }
