@@ -157,9 +157,11 @@ function matches(input, words, and_or) {
 }
 
 function openEmail(to, subject, text) { 
+    text += "\n\n\nMail sent via Jeannie http://voice-actions.com";
+
     subject = encodeURI(subject);
     var body = encodeURI(text);
-    to = encodeURI(to);
+    to = encodeURI(to);    
     window.location.href = 'mailto:'+to+'?subject=' + subject + '&body=' + body;
 }
 
@@ -171,13 +173,20 @@ function openEmail(to, subject, text) {
 //    TODO it should also be possible to say 'send this to peter'
 //    TODO if not specified => ask for it!
 Composer = function() {
-    this.state = 'inactive';
-    this.to = '';
-    this.subject = '';    
-    this.type = 'email';
-    this.lastIndex = 0;
     this.wholeDiv = $("#inputarea");
     this.area = $("#inputarea textarea");
+    this.clear();
+    this.lastIndex = 0;    
+    var tmp = this;
+    $('#inputarea #cancelmail').click(function(event) {
+        event.preventDefault();
+        tmp.cancel();
+    });
+        
+    $('#inputarea #sendmail').click(function(event) {
+        event.preventDefault();
+        tmp.endCompose();
+    });
 }
 
 Composer.prototype.openComposer = function(mailToData, input) {
@@ -208,27 +217,31 @@ Composer.prototype.compose = function(input) {
 //        }        
 }
 
+Composer.prototype.cancel = function() {
+    this.state = 'inactive';
+    this.showInputArea(false);
+}
+
 Composer.prototype.isComposeCommand = function(input) {
     if(!input || this.state == 'inactive')
         return false;
     
     var tmpLen;
     if(exactMatches(input, ["cancel email", "cancel", "discard", "discard email", "discard it"])) {
-        this.state = 'inactive';
-        this.showInputArea(false);
+        this.cancel();
         
     } else if(this.isEndCompose(input)) {
-        this.state = 'inactive';
+        this.endCompose();
         
-        // TODO support sms
-        if(this.type == 'email') {
-            openEmail(this.to, this.subject, this.getBody());
-        }
-        this.showInputArea(false);
-        
-        // still avoid that 'send email' will be sent to API => return true;        
+    // still avoid that 'send email' will be sent to API => return true;        
     } else if(exactMatches(input, ["clear", "clear all", "remove all", "delete all"])) {
         this.clearBody();
+        
+    } else if(exactMatches(input, ["new line", "press enter", "enter"])) {        
+        this.addToBody('\n');
+        
+    } else if(exactMatches(input, ["paragraph", "new paragraph"])) {        
+        this.addToBody('\n\n');
         
     } else if(exactMatches(input, ["full stop"])) {
         // period, question mark, exclamation mark/point are already transformed by google speech recognition
@@ -243,6 +256,16 @@ Composer.prototype.isComposeCommand = function(input) {
         this.addToBody(input);        
     }
     return true;
+}
+
+Composer.prototype.endCompose = function() {
+    this.state = 'inactive';
+        
+    // TODO support sms
+    if(this.type == 'email') {
+        openEmail(this.to, this.subject, this.getBody());
+    }
+    this.showInputArea(false);
 }
 
 Composer.prototype.replaceOldInBody = function(input) {
@@ -265,6 +288,14 @@ Composer.prototype.clearBody = function() {
     return this.area.val('');
 }
 
+Composer.prototype.clear = function() {
+    this.clearBody();
+    this.state = 'inactive';
+    this.to = '';
+    this.subject = '';    
+    this.type = 'email';
+}
+
 Composer.prototype.getBody = function() {
     return this.area.val();
 }
@@ -275,6 +306,7 @@ Composer.prototype.showInputArea = function(show) {
         this.wholeDiv.show();
         this.area.focus()
     } else {
+        this.clear();
         $("#myinput").show();
         this.wholeDiv.hide();
     }

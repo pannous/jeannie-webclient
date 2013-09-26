@@ -14,8 +14,7 @@ var composeObject;
 
 $(document).ready(function(e) {
     composeObject = new Composer();
-    $('#myinput').focus();
-    
+    $('#myinput').focus();        
     $("#google_login").click(function() {
         handleGoogleLogin();
     });
