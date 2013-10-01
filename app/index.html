@@ -82,24 +82,7 @@
                                autocomplete="off" maxlength="200"
                                placeholder="Enter your question or use microphone"
                                onwebkitspeechchange="mysubmit()"
-                               x-webkit-speech="" />
-                        <div id="inputarea" class="hidden">
-                            <div id="composer-names"></div>
-                            <textarea cols="62" rows="8"></textarea>
-                            <div id="cmd-buttons">
-                                <button id="cancelmail">Cancel</button>
-                                <button id="sendmail">Send</button>
-                            </div>
-                            <div id="composer-commands" title="Supported Commands">
-                                <pre>
-clear | remove all
-delete that/it | remove that/it
-cancel | cancel that/it | discard
-I said (correction)
-send that/it | finish
-                                </pre>
-                            </div>
-                        </div>
+                               x-webkit-speech="" />                        
                         <select id="locale-menu" name="locale" onchange="changeLanguage(this.value)">
                             <!-- http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 -->
                             <option value="" title="img/country/.png">Guess</option>
@@ -171,6 +154,24 @@ send that/it | finish
                             <option value="tr" title="img/country/tr.png">  </option>
                         </select>
                     </form>
+                    <div id="inputarea" class="hidden">
+                        <div id="composer-names"></div>
+                        <textarea id="mytextarea"cols="62" rows="8"></textarea>
+                        <div id="cmd-buttons">
+                            <button id="cancelmail">Cancel</button>
+                            <button id="sendmail">Send</button>
+                        </div>
+                        <div id="composer-commands" title="Supported Commands">
+                            <pre>
+clear | remove all
+delete that/it | remove that/it
+press enter
+cancel | cancel that/it | discard
+I said (correction)
+send that/it | finish
+                            </pre>
+                        </div>
+                    </div>
                     <button id="speechrec_start" class="hidden" onclick="startButton(true)">
                         <img id="start_img" src="img/mic.png" alt="Start">
                     </button>                    

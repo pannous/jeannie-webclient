@@ -6,6 +6,17 @@ function startsWith(str, suffix) {
     return str.indexOf(suffix) == 0;
 }
 
+// do not remove new lines
+function simpleTrim(str) {
+    if(!str)
+        return "";
+    if(startsWith(str, " "))
+        str = str.substr(1, str.length - 1);
+    if(endsWith(str, " "))
+        str = str.substr(0, str.length - 2);
+    return str;
+}
+
 function getLocale(l) {
     return (l == null) ? '' : l.toString();
 }
@@ -167,8 +178,6 @@ function openEmail(to, subject, text) {
 
 // 1. enable input area => type=sms/email, (default email)
 // 2. disable send but still listen
-//    TODO automatically copy to clipboard full text?
-//    TODO detect special commands like 'new line', 'question mark', 'apostrophe', 'dot/point'
 // 3. detect 'send' and create the email/sms, and disable input area
 //    TODO it should also be possible to say 'send this to peter'
 //    TODO if not specified => ask for it!
@@ -189,32 +198,39 @@ Composer = function() {
     });
 }
 
-Composer.prototype.openComposer = function(mailToData, input) {
-    if(!mailToData)
-        return false;
+Composer.prototype.open = function(composerObject, input) {
+    if(!composerObject)
+        return false;        
     
-    if(mailToData.to) {
-        var names = $("#inputarea #composer-names");
-        names.append("To: " + mailToData.names);
-    }
+    this.to = composerObject.to;
+    this.toName = composerObject.toName;
+    this.toPhone = composerObject.toPhone;
+    this.toEmail = composerObject.toEmail;
+    if(composerObject.type)
+        this.type = composerObject.type;
     
-    this.to = mailToData.to;
-    this.subject = mailToData.subject;
-    this.setBody(mailToData.body);
+    this.title = composerObject.title;
+    this.setBody(composerObject.message);
     this.compose(input);
+    
+    if(composerObject.to) {
+        var toName = composerObject.to;
+        if(composerObject.toName)
+            toName = composerObject.toName;
+        
+        var names = $("#inputarea #composer-names");
+        var tmp = "Email";
+        if(this.type == "sms")
+            tmp = "SMS";
+        names.empty();
+        names.append(tmp + " to: " + toName);
+    }
     return true;
 }
 
 Composer.prototype.compose = function(input) {
     this.showInputArea(true);
     this.state = 'active';
-        
-    // TODO support sms
-    //        if(isSMSType(input)) {
-    //            composeObject.type = 'sms';
-    //        } else {
-    this.type = 'email';
-//        }        
 }
 
 Composer.prototype.cancel = function() {
@@ -260,10 +276,14 @@ Composer.prototype.isComposeCommand = function(input) {
 
 Composer.prototype.endCompose = function() {
     this.state = 'inactive';
-        
-    // TODO support sms
     if(this.type == 'email') {
-        openEmail(this.to, this.subject, this.getBody());
+        var to = this.to;
+        if(this.toName && this.to)
+            to = this.toName + " <" + this.to + ">";
+        openEmail(to, this.title, this.getBody());
+    } else {        
+        $('#myinput').val("send sms to " + this.to + " text " + this.getBody());
+        mysubmit();
     }
     this.showInputArea(false);
 }
@@ -274,13 +294,21 @@ Composer.prototype.replaceOldInBody = function(input) {
 }
 
 Composer.prototype.setBody = function(str) {
-    this.area.val($.trim(str));
+    str = simpleTrim(str);    
+    this.area.val(str);
+    
+// hmmh does not put the caret to the end in chrome ...
+//    var el = document.getElementById("mytextarea");
+//    if (typeof el.selectionStart == "number") {
+//        el.selectionStart = this.area.selectionEnd = newContent.length - 1;
+//        this.area.focus();
+//    }
 }
     
 Composer.prototype.addToBody = function(input) {
     var old = this.area.val();
     this.lastIndex = old.length;
-    this.setBody(old + " " + input);
+    this.setBody(old + " " + input);    
 }
 
 Composer.prototype.clearBody = function() {
@@ -292,7 +320,8 @@ Composer.prototype.clear = function() {
     this.clearBody();
     this.state = 'inactive';
     this.to = '';
-    this.subject = '';    
+    this.toName = '';
+    this.title = '';    
     this.type = 'email';
 }
 
@@ -303,8 +332,8 @@ Composer.prototype.getBody = function() {
 Composer.prototype.showInputArea = function(show) {
     if(show) {
         $("#myinput").hide();
-        this.wholeDiv.show();
-        this.area.focus()
+        this.wholeDiv.show();        
+        this.area.focus();        
     } else {
         this.clear();
         $("#myinput").show();

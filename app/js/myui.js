@@ -10,10 +10,10 @@ var apiLogin="chrome-demo";
 var apiKey="";
 var apiDebug = false;
 var apiURL = "https://ask.pannous.com/api";
-var composeObject;
+var composer;
 
 $(document).ready(function(e) {
-    composeObject = new Composer();
+    composer = new Composer();
     $('#myinput').focus();        
     $("#google_login").click(function() {
         handleGoogleLogin();
@@ -131,7 +131,7 @@ function closePopupWindow() {
 
 function doRequest(input, locale, latLon) {
     closePopupWindow();
-    if(composeObject.isComposeCommand(input))
+    if(composer.isComposeCommand(input))
         return;
     
     if(!latLon)
@@ -189,7 +189,6 @@ function doRequest(input, locale, latLon) {
         var text = "";
         var imageSrc;
         var openUrl = false;
-        var mailtoObject = false;
         var showUrl = false;
         var actions = false;
         var input = "";
@@ -225,7 +224,12 @@ function doRequest(input, locale, latLon) {
             
             if(actions.open) {
                 openUrl = actions.open.url;
-                mailtoObject = actions.open.mailto;
+                var composeObject = actions.open.composeObject;                
+                if(composeObject && jsonIsFalse(composeObject.confirmed)) {
+                    composer.open(composeObject, input);
+                    // no append to output and no talking
+                    return;
+                }
             }
 
             if(actions.show) {
@@ -307,29 +311,20 @@ function doRequest(input, locale, latLon) {
             output.append(smallDiv);
         }
 
-        if(openUrl) {
-            if(mailtoObject) {                
-                composeObject.openComposer(mailtoObject, input);
-                // no append to output and no talking
-                return;
-                
-            // old behaviour:
-            // document.location.href = openUrl;
-            } else {
-                // then it is hard to press Back button:
-                // location.href = openUrl;
+        if(openUrl) {            
+            // then it is hard to press Back button:
+            // location.href = openUrl;
 
-                // does not work:
-                // var aEl = addLink(output, "Open URL", openUrl);
-                // aEl.attr('id', '123');
-                // aEl.attr('target', '_blank');
-                // aEl.click();
+            // does not work:
+            // var aEl = addLink(output, "Open URL", openUrl);
+            // aEl.attr('id', '123');
+            // aEl.attr('target', '_blank');
+            // aEl.click();
 
-                // does not create a new tab for me on chrome, only new windows:
-                //            popupWindow = window.open(openUrl, '_blank');
-                popupWindow = window.open(openUrl, '_newtab');
-                popupWindow.focus();
-            }
+            // does not create a new tab for me on chrome, only new windows:
+            //            popupWindow = window.open(openUrl, '_blank');
+            popupWindow = window.open(openUrl, '_newtab');
+            popupWindow.focus();            
         }
                 
         mainOutput.prepend(output);
@@ -346,6 +341,11 @@ function doRequest(input, locale, latLon) {
         mainOutput.prepend(output);
         addText(output, "Cannot get the connection to the API for Jeannie: " + err.status + " " + err.statusText, true);
     }).pipe(exec);
+}
+
+// TODO fixme: should not be necessary
+function jsonIsFalse(bool) {
+    return bool == 'undefined' || bool == "false" || bool == false;
 }
 
 function parseAndConvertStartDate(dateStr) {

@@ -18,12 +18,12 @@ var googvars = {
     apiKey : 'AIzaSyAHIAkpSvR075MDwzxR_E1nJkQLXT1XSbM',
 
     scopes : "https://www.googleapis.com/auth/userinfo.email"
-        + " https://www.googleapis.com/auth/calendar"
-    // for the mail feed no longer necessary + " https://mail.google.com/mail/feed/atom"
-    // for imap
-        + " https://mail.google.com/"
-    // for contacts -> to send mail
-        + " https://www.google.com/m8/feeds/"
++ " https://www.googleapis.com/auth/calendar"
+// for the mail feed no longer necessary + " https://mail.google.com/mail/feed/atom"
+// for imap
++ " https://mail.google.com/"
+// for contacts -> to send mail
++ " https://www.google.com/m8/feeds/"
 }
 
 googvars.getURLParams = function() {
@@ -41,28 +41,29 @@ function shouldHandleGoogle(input) {
    
     // to access contacts and mail feed
     return matches(input, "mail") 
-        || matches(input, ["google", "login"], "AND")
+    || matches(input, ["google", "login"], "AND")
     // to access calendar
-        || matches(input, ["remind", "appointment", "alarm", "wake", "calendar"])
-        || matches(input, ["erinner", "termin", "weck", "kalender"])
+    || matches(input, ["remind", "appointment", "alarm", "wake", "calendar"])
+    || matches(input, ["erinner", "termin", "weck", "kalender"])
     // to access contacts
-        || matches(input, ["sms", "phone", "mobile", "contact", "address"])
-        || matches(input, ["telefon", "nummer", "handy", "kontakt", "adresse"])
+    || matches(input, ["sms", "phone", "mobile", "contact", "address"])
+    || matches(input, ["telefon", "nummer", "handy", "kontakt", "adresse"])
     // call
-        || matches(input, ["skype", "call"]) 
-        || matches(input, "anrufen") || matches(input, ["ruf", "an"], "AND");
+    || matches(input, ["skype", "call"]) 
+    || matches(input, "anrufen") || matches(input, ["ruf", "an"], "AND");
 }
 
 function handleGoogleLogin(callback) {
     googvars.callback = callback;
     gapi.load('client', function() {
         gapi.client.setApiKey(googvars.apiKey);
+        // prompt: "consent"
         gapi.auth.authorize({
             client_id: googvars.clientId,
             scope: googvars.scopes,
             immediate: true,
             response_type: "token"
-            // , approval_prompt: "force"
+        // , approval_prompt: "force"
         }, handleAuthResult);
     });
 }
@@ -74,6 +75,7 @@ function handleAuthResult(authResult) {
         gapi.auth.authorize({
             client_id: googvars.clientId,
             scope: googvars.scopes,
+            // important otherwise endless loop
             immediate: false,
             response_type: "token"
         }, handleAuthResult);

@@ -159,7 +159,9 @@ function initWebkitSpeechRecognition() {
 
         console.log("finalTranscript:" + finalTranscript);
         copyToClipboard(finalTranscript);
-        var input = $.trim(capitalize(finalTranscript));
+        // no capitalize() for now
+        
+        var input = simpleTrim(finalTranscript); 
         if(sleeping) {
             tryWakeup(input);
         // wake up command should not result in a request
